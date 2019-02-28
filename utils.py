@@ -78,23 +78,27 @@ def preprocess(config):
 	factors_data_scaled = np.where(factors_data_scaled < 0, 0, factors_data_scaled)
 	factors_data_scaled = np.where(factors_data_scaled > 9999, 0, factors_data_scaled)
 	# factors_data_scaled shape = (6, 72_time, input_size_w, input_size_j)
+	print('factors_data_scaled.shape:', factors_data_scaled.shape)
 
 	# 缩放地形数据，作为模型输入的一部分
 	dem_data = scipy.ndimage.zoom(dem_data, (1, scale_w, scale_j))
 	dem_data = np.tile(dem_data, (factors_data_scaled.shape[1], 1))  # 重复时间维次:factors_data_scaled.shape[1]
 	dem_data = dem_data.reshape(1, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
 	# dem_data shape = (1, 72_time, input_size_w, input_size_j)
+	print('dem_data.shape:', dem_data.shape)
 
 	# 缩放标签数据，作为模型输入的label部分
 	scale_w = config.output_size_w / label_data.shape[-2]
 	scale_j = config.output_size_j / label_data.shape[-1]
 	label_ = scipy.ndimage.zoom(label_data, (1, scale_w, scale_j))
 	label_ = np.maximum(label_, 0)
-	label_ = label_.reshape(-1, config.output_size_w, config.output_size_j, 1)
+	label_ = label_.reshape(-1, config.output_size_w, config.output_size_j)
 	# label_ shape = (72_time, output_size_w, output_size_j)
+	print('label_.shape:', label_.shape)
 
-	input_ =  np.append(factors_data_scaled, dem_data)
+	input_ = np.append(factors_data_scaled, dem_data)
 	input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
+	input_ = input_.transpose((1, 2, 3, 0))
 	return input_, label_
 
 
