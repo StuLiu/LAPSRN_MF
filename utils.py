@@ -47,9 +47,10 @@ def preprocess_reconstruct(config):
 
 
 def preprocess(config):
-	factors_data = get_data(config.factors_dir)         # shape(6, 72_time, size_w, size_j)
-	dem_data = get_data(config.dem_dir)                 # shape(1, size_w, size_j)
+	dem_data = get_data(config.dem_dir)                             # shape(1, size_w, size_j)
 	label_data = get_data(config.factors_dir, config.factor_str)    # shape(72_time, size_w, size_j)
+	factors_data = get_data(config.factors_dir)                     # shape(6, 72_time, size_w, size_j)
+
 
 	print(factors_data.shape, dem_data.shape, label_data.shape)
 
