@@ -63,7 +63,8 @@ def main(_):
 	if not os.path.exists(FLAGS.ckpt):
 		os.makedirs(FLAGS.ckpt)
 
-	preprocess(FLAGS)
+	input_, label_ = preprocess(FLAGS)
+	print(input_.shape, label_.shape)
 	# with tf.Session() as sess:
 	# 	# gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
 	# 	# with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
