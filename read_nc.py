@@ -86,10 +86,9 @@ def get_data(name, rang=''):
 		for path in paths:
 			if (rang in path):
 				d.append(progress(path))
-				#print(len(d))
+				d = np.array(d)#.squeeze()
+				d = d.reshape(-1, d.shape[-2], d.shape[-1])
 				break
-			d = np.array(d)#.squeeze()
-			d = d.reshape(-1, d.shape[-2], d.shape[-1])
 	print('d.reshape: ',d.shape)
 	return d
 
