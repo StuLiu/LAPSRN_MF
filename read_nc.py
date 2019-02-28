@@ -1,8 +1,6 @@
 import netCDF4 as nc
-import tensorflow as tf
 import os
 import glob
-import scipy.ndimage
 import numpy as np
 
 
