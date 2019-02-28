@@ -105,7 +105,7 @@ def progress(path):
 		if "dem" in path:
 			d =data.variables['dem'][:]
 		#降水输入
-		elif "PRE10m" in path:
+		elif "PRE" in path:
 			d = data.variables['PRE10m'][:]  # squeeze()为numpy的函数，去除维度为1的维
 		elif "PRS" in path:
 			d = data.variables['PRS'][:]
