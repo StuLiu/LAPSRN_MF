@@ -92,7 +92,7 @@ def preprocess(config):
 	scale_j = config.output_size_j / label_data.shape[-1]
 	label_ = scipy.ndimage.zoom(label_data, (1, scale_w, scale_j))
 	label_ = np.maximum(label_, 0)
-	label_ = label_.reshape(-1, config.output_size_w, config.output_size_j)
+	label_ = label_.reshape(-1, config.output_size_w, config.output_size_j, 1)
 	# label_ shape = (72_time, output_size_w, output_size_j)
 	print('label_.shape:', label_.shape)
 
