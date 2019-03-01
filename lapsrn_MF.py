@@ -135,9 +135,9 @@ class LapSRN(object):
 		self.sess.run(tf.global_variables_initializer())
 
 		if self.load(self.ckpt):
-			print('[*]LOADING SUCCESS')
+			print('[*]LOADING SUCCESS', self.ckpt)
 		else:
-			print('[!]LOADING FAILED')
+			print('[!]LOADING FAILED', self.ckpt)
 
 		idx = len(input)//self.batch_size
 		writedata = []

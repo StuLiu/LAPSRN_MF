@@ -23,8 +23,6 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         checkpoint_dir = os.path.join("checkpoint", mode_str)
         checkpoint_dir = os.path.join(checkpoint_dir, area_str)
         checkpoint_dir = os.path.join(checkpoint_dir, factor_str)
-        model_dir = "{}_{}_{}".format("lapsrn", output_size_w, output_size_j)
-        checkpoint_dir = os.path.join(checkpoint_dir, model_dir)
 
         flags.DEFINE_integer('Epoch', Epoch, 'the number of epochs')
         flags.DEFINE_float('lr', learning_rate, 'learning rate')
@@ -67,4 +65,9 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         lapsrn.test(FLAGS)
 
 if __name__ == '__main__':
-    run_test('4', 'NMC', 'PRE', 'factors/4', 'output_1km')
+    run_test(area_str='4',
+         mode_str='NMC',
+         factor_str='PRE',
+         input_dir='factors/4',
+         output_dir='output_1km'
+    )
