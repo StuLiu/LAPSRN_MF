@@ -20,7 +20,7 @@ def is_zero(l):
 
 
 def preprocess_reconstruct(config):
-	factors_data = get_data(config.factors_dir)
+	factors_data = get_data(config.input_dir)
 	dem_data = get_data(config.dem_dir)
 
 	# 将nan数据置零

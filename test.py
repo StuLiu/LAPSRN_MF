@@ -29,8 +29,8 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         flags.DEFINE_integer('Epoch', Epoch, 'the number of epochs')
         flags.DEFINE_float('lr', learning_rate, 'learning rate')
         flags.DEFINE_float('dr', decay_rate, 'decay rate')
-        flags.DEFINE_string('input', input_dir, 'directory of input')
-        flags.DEFINE_string('output', output_dir, 'directory of output')
+        flags.DEFINE_string('input_dir', input_dir, 'directory of input')
+        flags.DEFINE_string('output_dir', output_dir, 'directory of output')
         flags.DEFINE_string('factors_dir', factors_dir, 'directory of label')
         flags.DEFINE_string('dem_dir', dem_dir, 'directory of dem')
         flags.DEFINE_integer('input_size_w', input_size_w, 'input size of image')
@@ -67,4 +67,4 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         lapsrn.test(FLAGS)
 
 if __name__ == '__main__':
-    run_test('4', 'NMC', 'PRE', 'input_5km', 'output_1km')
+    run_test('4', 'NMC', 'PRE', 'factors/4', 'output_1km')

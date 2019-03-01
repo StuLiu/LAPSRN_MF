@@ -20,9 +20,9 @@ def prepare_data(dataset):
 	return data
 
 def get_time_dimen(config):
-	paths = prepare_data(config.input)
+	paths = prepare_data(config.input_dir)
 	if len(paths) == 0:
-		print("There is no file in the:{0}".format(config.input))
+		print("There is no file in the:{0}".format(config.input_dir))
 		exit()
 	path = paths[0]
 	
@@ -36,9 +36,9 @@ def get_time_dimen(config):
 	return time
 
 def get_lat_lon_dimen(config):
-	paths = prepare_data(config.label)
+	paths = prepare_data(config.factors_dir)
 	if len(paths) == 0:
-		print("There is no file in the:{0}".format(config.label))
+		print("There is no file in the:{0}".format(config.factors_dir))
 		exit()
 	path = paths[0]
 	dataset = nc.Dataset(path)
