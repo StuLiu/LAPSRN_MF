@@ -1,18 +1,20 @@
-from lapsrn import LapSRN
+from lapsrn_MF import LapSRN
 import pprint
 import tensorflow as tf
 import os
 from utils import parse_config_test
 import sys
 
-mode_str ,area_str, factor_str = None, None, None
-try:
-	mode_str = sys.argv[1].split("=")[1].upper()    # NMC or others
-	area_str = sys.argv[2].split("=")[1]            # 1, 2, 3, 4, 5, 6, 7, 8
-	factor_str = sys.argv[3].split("=")[1].upper()  # PRE, PRS, RHU, TEM, WIND, WINS
-except Exception:
-	print("train.py接收参数错误，类似：python train.py mode=NMC area=1 factor=PRE")
-	exit()
+# mode_str ,area_str, factor_str = None, None, None
+# try:
+# 	mode_str = sys.argv[1].split("=")[1].upper()    # NMC or others
+# 	area_str = sys.argv[2].split("=")[1]            # 1, 2, 3, 4, 5, 6, 7, 8
+# 	factor_str = sys.argv[3].split("=")[1].upper()  # PRE, PRS, RHU, TEM, WIND, WINS
+# except Exception:
+# 	print("train.py接收参数错误，类似：python train.py mode=NMC area=1 factor=PRE")
+# 	exit()
+
+mode_str ,area_str, factor_str = 'NMC', '4', 'PRE'
 
 # 获取配置文件路径
 config_path = os.path.join(os.getcwd(), "config")
@@ -49,14 +51,12 @@ try:
 	flags.DEFINE_string('dem_dir', dem_dir, 'directory of dem')
 	flags.DEFINE_string('factors_dir', factors_dir, 'directory of label')
 	flags.DEFINE_string('factor_str', factor_str, 'directory of label')
-
 	flags.DEFINE_integer('batch_size', batch_size, 'batch size')
 	flags.DEFINE_boolean('is_train', True, 'True for training False for test')
 except Exception as e:
 	print("获取配置信息时出错：", e)
 
 
-from utils import preprocess
 def main(_):
 	pp = pprint.PrettyPrinter()
 	pp.pprint(FLAGS.__flags)
