@@ -96,9 +96,8 @@ def preprocess(config):
 	# label_ shape = (72_time, output_size_w, output_size_j)
 	print('label_.shape:', label_.shape)
 
-	input_ = list(factors_data_scaled)
-	input_.append(list(dem_data))
-	input_ = np.array(input_)
+	input_ = np.append(factors_data_scaled, dem_data)
+	input_ = input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
 	print('input_.shape origin:', input_.shape)
 	input_ = input_.transpose((1, 2, 3, 0))
 	print('input_.shape transposed:', input_.shape)
@@ -122,4 +121,4 @@ if __name__=='__main__':
 					[[7, 8, 9],
 					    [10, 11, 12]]
 	              ])
-	print(c.shape, c)
+	print(np.append(a,b).reshape(3, 2 ,3).transpose(1,2,0))
