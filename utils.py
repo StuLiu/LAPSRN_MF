@@ -37,12 +37,12 @@ def preprocess_reconstruct(config):
 	factors_data_scaled = np.maximum(factors_data_scaled, 0)
 	factors_data_scaled = np.where(factors_data_scaled < 0, 0, factors_data_scaled)
 	factors_data_scaled = np.where(factors_data_scaled > 9999, 0, factors_data_scaled)
-	print('factors_data_scaled:', factors_data_scaled)
+	print('factors_data_scaled:', factors_data_scaled.shape)
 
 	dem_data_scaled = scipy.ndimage.zoom(dem_data, (1, scale_w, scale_j))
 	dem_data_scaled = np.tile(dem_data_scaled, (factors_data_scaled.shape[1], 1))  # 重复时间维次:factors_data_scaled.shape[1]
 	dem_data_scaled = dem_data_scaled.reshape(1, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
-	print('dem_data_scaled:', dem_data_scaled)
+	print('dem_data_scaled:', dem_data_scaled.shape)
 
 	input_ = np.append(factors_data_scaled, dem_data_scaled)
 	input_ = input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
