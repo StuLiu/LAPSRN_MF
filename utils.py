@@ -20,8 +20,8 @@ def is_zero(l):
 
 
 def preprocess_reconstruct(config):
-	factors_data = get_data(config.input)
-	dem_data = get_data(config.feature)
+	factors_data = get_data(config.factors_dir)
+	dem_data = get_data(config.dem_dir)
 
 	# 将nan数据置零
 	dex = np.isnan(dem_data)
@@ -31,19 +31,20 @@ def preprocess_reconstruct(config):
 	# dem_data = dem_data/3000.
 
 	# img_ = get_data(config.input)
-	scale0w = config.factors_datasize_w / factors_data.shape[-2]
-	scale0j = config.factors_datasize_j / factors_data.shape[-1]
-	img_ = scipy.ndimage.zoom(factors_data, (1, scale0w, scale0j))
+	scale_w = config.input_size_w / factors_data.shape[-2]
+	scale_j = config.input_size_j / factors_data.shape[-1]
+	factors_data_scaled = scipy.ndimage.zoom(factors_data, (1, scale_w, scale_j))
+	print('factors_data_scaled:', factors_data_scaled)
 
-	scale1w = config.factors_datasize_w / dem_data.shape[-2]
-	scale1j = config.factors_datasize_j / dem_data.shape[-1]
-	dem_data = scipy.ndimage.zoom(dem_data, (1, scale1w, scale1j))
+	dem_data_scaled = scipy.ndimage.zoom(dem_data, (1, scale_w, scale_j))
+	dem_data_scaled = np.tile(dem_data_scaled, (factors_data_scaled.shape[1], 1))  # 重复时间维次:factors_data_scaled.shape[1]
+	dem_data_scaled = dem_data_scaled.reshape(1, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
+	print('dem_data_scaled:', dem_data_scaled)
 
-	shap = img_.shape
-	image_ = np.zeros((shap[0], shap[1], shap[2], 2))
-	image_[:, :, :, 0] = img_
-	image_[:, :, :, 1] = dem_data
-	return image_
+	input_ = np.append(factors_data_scaled, dem_data_scaled)
+	input_ = input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
+	input_ = input_.transpose((1, 2, 3, 0))
+	return input_
 
 
 def preprocess(config):

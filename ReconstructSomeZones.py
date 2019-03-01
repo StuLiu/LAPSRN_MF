@@ -8,6 +8,8 @@ from test import *
 from read_nc import get_name
 os.environ["CUDA_VISIBLE_DEVICES"] = "10"  #GPU10 is not exists! So it will use CPU instead!
 
+# checkpoint/NMC/4/PRE/lapsrn_1201_2001
+
 # we recept there parameters from the shell or user input.
 # The first parameter is mode str. The format like this:model=nmc
 # The second parameter is time str.The format like this:dateTime=2018072100
