@@ -96,9 +96,12 @@ def preprocess(config):
 	# label_ shape = (72_time, output_size_w, output_size_j)
 	print('label_.shape:', label_.shape)
 
-	input_ = np.append(factors_data_scaled, dem_data)
-	input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
+	input_ = list(factors_data_scaled)
+	input_.append(list(dem_data))
+	input_ = np.array(input_)
+	print('input_.shape origin:', input_.shape)
 	input_ = input_.transpose((1, 2, 3, 0))
+	print('input_.shape transposed:', input_.shape)
 	return input_, label_
 
 
@@ -111,7 +114,12 @@ def parse_config_test(config_path, section, option):
 	cp.read(config_path)
 	return cp.get(section, option)
 
-# if __name__=='__main__':
-# parse_config()
-
-
+if __name__=='__main__':
+	a = np.array([[[1, 2, 3], [4, 5, 6]]])
+	b = np.array([
+					[[7, 8, 9],
+	                    [10, 11, 12]],
+					[[7, 8, 9],
+					    [10, 11, 12]]
+	              ])
+	print(c.shape, c)
