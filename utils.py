@@ -33,7 +33,10 @@ def preprocess_reconstruct(config):
 	# img_ = get_data(config.input)
 	scale_w = config.input_size_w / factors_data.shape[-2]
 	scale_j = config.input_size_j / factors_data.shape[-1]
-	factors_data_scaled = scipy.ndimage.zoom(factors_data, (1, scale_w, scale_j))
+	factors_data_scaled = scipy.ndimage.zoom(factors_data, (1, 1, scale_w, scale_j))
+	factors_data_scaled = np.maximum(factors_data_scaled, 0)
+	factors_data_scaled = np.where(factors_data_scaled < 0, 0, factors_data_scaled)
+	factors_data_scaled = np.where(factors_data_scaled > 9999, 0, factors_data_scaled)
 	print('factors_data_scaled:', factors_data_scaled)
 
 	dem_data_scaled = scipy.ndimage.zoom(dem_data, (1, scale_w, scale_j))
