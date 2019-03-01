@@ -118,12 +118,13 @@ class LapSRN(object):
 				if counter % 10 == 0:
 					print('Epoch: {0} lr: {1:.4} loss: {2:.4} res_learned: {3:.4} res_real: {4:.4}'.format(ep+1,rate,loss,rl,rr))
 				if counter%200 == 0:
-					self.save(self.ckpt,counter)	
+					self.save(self.ckpt,counter)
+
 	def test(self, config):
-		input = preprocess_reconstruct(config)		
-		print("测试时候，输入数据的shape是：{0}".format(input.shape))
-		names = get_name(config.input)
-		all_dimen = []
+		# input = preprocess_reconstruct(config)
+		# print("测试时候，输入数据的shape是：{0}".format(input.shape))
+		# names = get_name(config.input_dir)
+		# all_dimen = []
 		time_dimen = get_time_dimen(config)
 		lat, lon = get_lat_lon_dimen(config)
 
@@ -156,7 +157,7 @@ class LapSRN(object):
 				outnc = [i for i in all_dimen]
 				#print(outnc[0])
 				outnc.append(writedata)
-				writepath = os.path.join(config.output, names[(i+1)//hours_len-1])
+				writepath = os.path.join(config.output_dir, names[(i+1)//hours_len-1])
 				writepath = os.path.join(os.getcwd(), writepath)
 				writenc(writepath,outnc)
 				writedata = []
