@@ -2,7 +2,7 @@ import netCDF4 as nc
 import numpy as np
 import zlib
 
-def writenc(name,data):
+def writenc(name, factor_str, data):
 	dataset = nc.Dataset(name,'w',format='NETCDF4',zlib=True) #'NETCDF4_CLASSIC')
 	keys = ['time','lat','lon','precipitation']
 	dataset.createDimension(keys[0], len(data[0]))
@@ -25,7 +25,7 @@ def writenc(name,data):
 	time.calendar = 'gregorian'
 	dataset.variables['lat'].units = 'degrees_north'
 	dataset.variables['lon'].units = 'degrees_east'
-	dataset.variables['precipitation'].units = 'mm'
+	dataset.variables[factor_str].units = 'mm'
 	dataset.close()
 
 

@@ -9,7 +9,7 @@ mode_str ,area_str, factor_str = None, None, None
 try:
 	mode_str = sys.argv[1].split("=")[1].upper()    # NMC or others
 	area_str = sys.argv[2].split("=")[1]            # 1, 2, 3, 4, 5, 6, 7, 8
-	factor_str = sys.argv[3].split("=")[1].upper()  # PRE, PRS, RHU, TEM, WIND, WINS
+	factor_str = sys.argv[3].split("=")[1].upper()  # PRE10m, PRS, RHU, TEM, WINDAvg2mi, WINSAvg2mi
 except Exception:
 	print("train.py接收参数错误，类似：python train.py mode=NMC area=1 factor=PRE")
 	exit()

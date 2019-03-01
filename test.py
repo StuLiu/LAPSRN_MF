@@ -29,7 +29,7 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         flags.DEFINE_float('dr', decay_rate, 'decay rate')
         flags.DEFINE_string('input_dir', input_dir, 'directory of input')
         flags.DEFINE_string('output_dir', output_dir, 'directory of output')
-        flags.DEFINE_string('factors_dir', factors_dir, 'directory of label')
+        flags.DEFINE_string('factors_dir', factors_dir, 'directory of factors')
         flags.DEFINE_string('dem_dir', dem_dir, 'directory of dem')
         flags.DEFINE_integer('input_size_w', input_size_w, 'input size of image')
         flags.DEFINE_integer('input_size_j', input_size_j, 'input size of image')
@@ -38,6 +38,7 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         flags.DEFINE_integer('batch_size', 1, 'batch size')
         flags.DEFINE_string('ckpt', checkpoint_dir, 'directory of checkpoint')
         flags.DEFINE_boolean('is_train', False, 'True for training False for test')
+        flags.DEFINE_string('factor_str', factor_str, 'factor name')
 
         pp = pprint.PrettyPrinter()
         FLAGS._parse_flags()
