@@ -47,8 +47,8 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
     except Exception as e:
         print("获取配置信息时出错：", e)
 
-    if not os.path.exists(FLAGS.output):
-        os.makedirs(FLAGS.output)
+    if not os.path.exists(FLAGS.output_dir):
+        os.makedirs(FLAGS.output_dir)
 
     with tf.Session() as sess:
     # gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
