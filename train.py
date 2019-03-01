@@ -76,7 +76,6 @@ def main(_):
 			FLAGS.output_size_j,
 			FLAGS.ckpt,
 			FLAGS.batch_size,
-			FLAGS.label,
 			FLAGS.is_train
 		)
 		lapsrn.train(FLAGS)
