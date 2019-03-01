@@ -7,13 +7,12 @@ import sys
 from write_nc import *
 
 class LapSRN(object):
-	def __init__(self, sess, Epoch, lr, dr, input_size_w, input_size_j, output_size_w, output_size_j, ckpt,  batch_size, label, is_train):
+	def __init__(self, sess, Epoch, lr, dr, input_size_w, input_size_j, output_size_w, output_size_j, ckpt,  batch_size, is_train):
 		self.sess = sess
 		self.Epoch = Epoch
 		self.lr, self.dr = lr, dr   # 学习率和递减率
 		self.input_size_w, self.input_size_j,self.output_size_w, self.output_size_j= input_size_w,input_size_j,output_size_w, output_size_j
 		self.ckpt = ckpt
-		self.label = label
 		self.batch_size = batch_size
 		self.is_train = is_train
 		self.keep_prob = tf.placeholder(tf.float32)
