@@ -63,25 +63,23 @@ def main(_):
 	if not os.path.exists(FLAGS.ckpt):
 		os.makedirs(FLAGS.ckpt)
 
-	input_, label_ = preprocess(FLAGS)
-	print(input_.shape, label_.shape)
-	# with tf.Session() as sess:
-	# 	# gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
-	# 	# with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
-	# 	lapsrn = LapSRN(sess,
-	# 		FLAGS.Epoch,
-	# 		FLAGS.lr,
-	# 		FLAGS.dr,
-	# 		FLAGS.input_size_w,
-	# 		FLAGS.input_size_j,
-	# 		FLAGS.output_size_w,
-	# 		FLAGS.output_size_j,
-	# 		FLAGS.ckpt,
-	# 		FLAGS.batch_size,
-	# 		FLAGS.label,
-	# 		FLAGS.is_train
-	# 	)
-	# 	lapsrn.train(FLAGS)
+	with tf.Session() as sess:
+		# gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
+		# with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
+		lapsrn = LapSRN(sess,
+			FLAGS.Epoch,
+			FLAGS.lr,
+			FLAGS.dr,
+			FLAGS.input_size_w,
+			FLAGS.input_size_j,
+			FLAGS.output_size_w,
+			FLAGS.output_size_j,
+			FLAGS.ckpt,
+			FLAGS.batch_size,
+			FLAGS.label,
+			FLAGS.is_train
+		)
+		lapsrn.train(FLAGS)
 
 
 if __name__ == '__main__':
