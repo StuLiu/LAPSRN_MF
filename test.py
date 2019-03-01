@@ -63,7 +63,6 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
                         FLAGS.output_size_j,
                         FLAGS.ckpt,
                         FLAGS.batch_size,
-                        FLAGS.label,
                         FLAGS.is_train)
         lapsrn.test(FLAGS)
 
