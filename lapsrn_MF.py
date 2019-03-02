@@ -159,7 +159,7 @@ class LapSRN(object):
 				outnc.append(writedata)
 				writepath = os.path.join(config.output_dir, names[(i+1)//hours_len-1])
 				writepath = os.path.join(os.getcwd(), writepath)
-				writenc(writepath, config.factors_str, outnc)
+				writenc(writepath, config.factor_str, outnc)
 				writedata = []
 				print('{0:11}/{1}   |'.format(i%hours_len+1, str(hours_len))+'██'*(i%hours_len+1)+'  '*(hours_len-1-i%hours_len)+'|   COMPLETE!')
 				sys.stdout.flush()
