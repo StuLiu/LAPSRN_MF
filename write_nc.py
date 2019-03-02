@@ -3,8 +3,8 @@ import numpy as np
 import zlib
 
 def writenc(name, factor_str, data):
-	dataset = nc.Dataset(name,'w',format='NETCDF4',zlib=True) #'NETCDF4_CLASSIC')
-	keys = ['time','lat','lon','precipitation']
+	dataset = nc.Dataset(name,'w',format='NETCDF4') #'NETCDF4_CLASSIC')
+	keys = ['time','lat','lon',factor_str]
 	dataset.createDimension(keys[0], len(data[0]))
 	dataset.createVariable(keys[0], np.float64, (keys[0]), zlib=True)
 	dataset.variables[keys[0]][:] = data[0]
