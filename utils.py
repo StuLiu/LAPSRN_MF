@@ -100,7 +100,7 @@ def preprocess(config):
 	label_ = scipy.ndimage.zoom(label_data, (1, scale_w, scale_j))
 	label_ = np.maximum(label_, 0)
 	label_ = label_.reshape(-1, config.output_size_w, config.output_size_j, 1)
-	# label_ shape = (72_time, output_size_w, output_size_j)
+	# label_ shape = (72_time, output_size_w, output_size_j, 1)
 	print('label_.shape:', label_.shape)
 
 	input_ = np.append(factors_data_scaled, dem_data)
@@ -111,7 +111,7 @@ def preprocess(config):
 
 	plt.imsave('dem_input.png', input_[0, :, :, 6])
 	plt.imsave('PRS_input.png', input_[0, :, :, 1])
-	plt.imsave('PRS_label.png', label_[0, :, :])
+	plt.imsave('PRS_label.png', label_[0, :, :, 0])
 	return input_, label_
 
 
