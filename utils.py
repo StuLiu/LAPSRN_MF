@@ -108,6 +108,10 @@ def preprocess(config):
 	print('input_.shape origin:', input_.shape)
 	input_ = input_.transpose((1, 2, 3, 0))
 	print('input_.shape transposed:', input_.shape)
+
+	plt.imsave('dem_input.png', input_[0, :, :, 6])
+	plt.imsave('PRS_input.png', input_[0, :, :, 1])
+	plt.imsave('PRS_label.png', label_[0, :, :])
 	return input_, label_
 
 
