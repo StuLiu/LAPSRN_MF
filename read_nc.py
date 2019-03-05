@@ -81,7 +81,7 @@ def get_data(name, rang=''):
 		if d.shape[0] == 1:     # 读取地形
 			d = d.reshape(-1, d.shape[-2], d.shape[-1])
 		elif d.shape[0] == 6:   # 读取6个要素数据，依次为降水、压强、湿度、温度、风向、风速。
-			d = d.reshape(6, -1, d.shape[-2], d.shape[-1])
+			d = d.reshape(6, -1, d.shape[-2], d.shape[-1]) # (气象要素, 时间维, 纬度, 经度)
 	else:
 		for path in paths:
 			if (rang in path):

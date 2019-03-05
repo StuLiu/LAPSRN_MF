@@ -47,6 +47,9 @@ def preprocess_reconstruct(config):
 	input_ = np.append(factors_data_scaled, dem_data_scaled)
 	input_ = input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
 	input_ = input_.transpose((1, 2, 3, 0))
+
+	plt.imsave('dem_.png', input_[0, :, :, 6])
+	plt.imsave('PRE10m.png', input_[0, :, :, 0])
 	return input_
 
 
