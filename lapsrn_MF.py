@@ -148,7 +148,7 @@ class LapSRN(object):
 			Output = self.sess.run([self.O],feed_dict={self.X:input[i*self.batch_size:(i+1)*self.batch_size], self.keep_prob:1})
 			# w,w_,Input,Res,Output = self.sess.run([self.w,self.w_,self.I,self.R,self.O],feed_dict={self.X:input[i*self.batch_size:(i+1)*self.batch_size],self.keep_prob:1})
 			#print("The shape of OutPut is:{0}".format(np.array(Output).shape))
-			writedata.append(np.array(Output).squeeze())
+			writedata.append(np.array(Output).squeeze())    # (时间维, 纬度维, 经度维)
 
 
 			print('{0:11}/{1}   |'.format(i%hours_len+1, str(hours_len))+'██'*(i%hours_len+1)+'  '*(hours_len-1-i%hours_len)+'|',end='\r')
