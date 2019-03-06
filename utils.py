@@ -48,8 +48,8 @@ def preprocess_reconstruct(config):
 	input_ = input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
 	input_ = input_.transpose((1, 2, 3, 0))
 
-	plt.imsave('dem_.png', input_[0, :, :, 6])
-	plt.imsave('PRE10m.png', input_[0, :, :, 0])
+	# plt.imsave('dem_.png', input_[0, :, :, 6])
+	# plt.imsave('PRE10m.png', input_[0, :, :, 0])
 	return input_
 
 
@@ -109,9 +109,9 @@ def preprocess(config):
 	input_ = input_.transpose((1, 2, 3, 0))
 	print('input_.shape transposed:', input_.shape)
 
-	plt.imsave('dem_input.png', input_[0, :, :, 6])
-	plt.imsave('PRS_input.png', input_[0, :, :, 1])
-	plt.imsave('PRS_label.png', label_[0, :, :, 0])
+	# plt.imsave('dem_input.png', input_[0, :, :, 6])
+	# plt.imsave('PRS_input.png', input_[0, :, :, 1])
+	# plt.imsave('PRS_label.png', label_[0, :, :, 0])
 	return input_, label_
 
 

@@ -149,7 +149,8 @@ class LapSRN(object):
 			# w,w_,Input,Res,Output = self.sess.run([self.w,self.w_,self.I,self.R,self.O],feed_dict={self.X:input[i*self.batch_size:(i+1)*self.batch_size],self.keep_prob:1})
 			#print("The shape of OutPut is:{0}".format(np.array(Output).shape))
 			writedata.append(np.array(Output).squeeze())
-			
+
+
 			print('{0:11}/{1}   |'.format(i%hours_len+1, str(hours_len))+'██'*(i%hours_len+1)+'  '*(hours_len-1-i%hours_len)+'|',end='\r')
 			sys.stdout.flush()
 
@@ -160,6 +161,10 @@ class LapSRN(object):
 				writepath = os.path.join(config.output_dir, names[(i+1)//hours_len-1])
 				writepath = os.path.join(os.getcwd(), writepath)
 				writenc(writepath, config.factor_str, outnc)
+
+				plt.imsave('PRS_1.png', writedata[0, :, :, 0])
+				plt.imsave('PRS_72.png', writedata[71, :, :, 0])
+
 				writedata = []
 				print('{0:11}/{1}   |'.format(i%hours_len+1, str(hours_len))+'██'*(i%hours_len+1)+'  '*(hours_len-1-i%hours_len)+'|   COMPLETE!')
 				sys.stdout.flush()
