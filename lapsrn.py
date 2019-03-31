@@ -33,15 +33,11 @@ class LapSRN(object):
 			# w_input是第一层卷积时候使用的权重，卷积核第三个参数对应X的深度
 			w_input = tf.get_variable(shape = [3,3,2,32],initializer = tf.random_normal_initializer(stddev=np.sqrt(2./(3*3*32))),name='w_input')
 		with tf.variable_scope('weights'):
+			# 特征提取模块，连续五层卷积+一层反卷积
 			for i in range(5):
 				w = tf.get_variable(shape = [3,3,32,32],initializer = tf.random_normal_initializer(stddev=np.sqrt(2./(3*3*32))),name='w'+str(i))
-			#self.w_ = tf.Variable(tf.ones([4,4,32,32]),name='w_')
-
 			# self.w_是一系列卷积后再进行反卷积使用的卷积核  4 4是卷积核的尺寸，1是输出通道数，32是输入通道数
 			self.w_ = tf.get_variable(shape = [4,4,1,32],initializer = tf.ones_initializer(),name='w_')
-			#bi_filter = get_upsample_filter(4,16)
-			#self.w_ = tf.Variable(tf.cast(bi_filter,tf.float32),name='w_')
-			#w_out = tf.Variable(tf.random_normal([3,3,32,1],stddev = np.sqrt(2./(3*3*1))),name='w_out')
 			
 			# w_out是进行先卷积再反卷积之后再SAME卷积作为输出时使用的卷积核
 			w_out = tf.get_variable(shape = [3,3,1,1],initializer = tf.random_normal_initializer(stddev = np.sqrt(2./(3*3*1))),name='w_out')
