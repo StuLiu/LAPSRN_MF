@@ -24,21 +24,19 @@ class LapSRN(object):
 		# tf.train.exponential_decay：使学习率指数衰减
 		self.learn_rate = tf.train.exponential_decay(self.lr,self.global_step,self.Epoch//10,self.dr)	
 		with tf.variable_scope('input'):
+			# 输入低分辨率数据
 			self.X = tf.placeholder(tf.float32,[self.batch_size,self.input_size_w,self.input_size_j,2],name = 'x')
-
+			# 输入低分辨率数据对应的高分辨率标签数据
 			self.Y = tf.placeholder(tf.float32,[self.batch_size,self.output_size_w,self.output_size_j,1],name = 'y')
-
-			#with tf.name_scope('weights'):
 			# self.w是反卷积的时候使用的权重
 			self.w = tf.get_variable(shape = [4,4,1,2],name='w',initializer = tf.ones_initializer())
-			
-			# w_input是卷积时候使用的权重
+			# w_input是第一层卷积时候使用的权重，卷积核第三个参数对应X的深度
 			w_input = tf.get_variable(shape = [3,3,2,32],initializer = tf.random_normal_initializer(stddev=np.sqrt(2./(3*3*32))),name='w_input')
 		with tf.variable_scope('weights'):
 			for i in range(5):
 				w = tf.get_variable(shape = [3,3,32,32],initializer = tf.random_normal_initializer(stddev=np.sqrt(2./(3*3*32))),name='w'+str(i))
 			#self.w_ = tf.Variable(tf.ones([4,4,32,32]),name='w_')
-			
+
 			# self.w_是一系列卷积后再进行反卷积使用的卷积核  4 4是卷积核的尺寸，1是输出通道数，32是输入通道数
 			self.w_ = tf.get_variable(shape = [4,4,1,32],initializer = tf.ones_initializer(),name='w_')
 			#bi_filter = get_upsample_filter(4,16)
@@ -55,14 +53,14 @@ class LapSRN(object):
 		# 3、反卷积操作输出的shape。4、反卷积时在图像每一维的步长，这是一个一维的向量，长度4。5、string类型的量，只能是"SAME","VALID"其中之一，这个值决定了不同的卷积方式
 		##-----------------------------------------------------------------------------------##
 		# 先使用反卷积把输入的数据提高到label大小。此时以变成单通道
-		self.I = tf.nn.conv2d_transpose(self.X,self.w,output_shape=[self.batch_size,self.output_size_w,self.output_size_j,1],strides=[1,5,5,1],padding='SAME')
+		self.I = tf.nn.conv2d_transpose(self.X, self.w, output_shape=[self.batch_size,self.output_size_w,self.output_size_j,1], strides=[1,5,5,1], padding='SAME')
 		# 接着使用Leaky_relu激活函数进行激活，
 		self.I = tf.maximum(0.1*self.I,self.I)# realize the leaky_relu function 
 		#conv_input = tf.nn.relu(tf.nn.conv2d(self.X,w_input,strides=[1,1,1,1],padding='SAME'))
 		##-----------------------------------------------------------------------------------##
 		
 		# 使用w_input对输入进行SAME卷积，并使用Leaky_relu激活函数进行激活
-		conv_input = tf.nn.conv2d(self.X,w_input,strides=[1,1,1,1],padding='SAME')
+		conv_input = tf.nn.conv2d(self.X, w_input, strides=[1,1,1,1],padding='SAME')
 		conv_input = tf.maximum(0.1*conv_input,conv_input)
 		
 		with tf.variable_scope('weights',reuse=True):
@@ -119,7 +117,7 @@ class LapSRN(object):
 				if counter % 10 == 0:
 					print('Epoch: {0} lr: {1:.4} loss: {2:.4} res_learned: {3:.4} res_real: {4:.4}'.format(ep+1,rate,loss,rl,rr))
 				if counter%200 == 0:
-					self.save(self.ckpt,counter)	
+					self.save(self.ckpt,counter)
 	def test(self, config):
 		input = preprocess_reconstruct(config)		
 		print("测试时候，输入数据的shape是：{0}".format(input.shape))
