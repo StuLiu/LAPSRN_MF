@@ -64,18 +64,6 @@ def preprocess(config):
 	dem_data[dex] = 0
 	dex = np.isnan(factors_data)
 	factors_data[dex] = 0
-	# dem_data = dem_data / 3000.
-
-	# # filter the data
-	# print("before filter input size is:")
-	# print("factors_data.shape:", factors_data.shape)
-	# factors_data = np.array(list(filter(is_zero, factors_data)))
-	# print("after filter the input size is:")
-	# print(factors_data.shape)
-
-	# label_ = factors_data
-	# print("after filter the label size is:")
-	# print(label_.shape)
 
 	# 缩放各要素数据，作为模型输入的一部分
 	scale_w = config.input_size_w / factors_data.shape[-2]
@@ -112,7 +100,22 @@ def preprocess(config):
 	# plt.imsave('dem_input.png', input_[0, :, :, 6])
 	# plt.imsave('PRS_input.png', input_[0, :, :, 1])
 	# plt.imsave('PRS_label.png', label_[0, :, :, 0])
-	return input_, label_
+	input_normalized = __normalize(input_)
+	if config.factor_str == 'PRE10m':
+		input_normalized[0] = input_[0]
+	elif config.factor_str == 'PRS':
+		input_normalized[1] = input_[1]
+	elif config.factor_str == 'RHU':
+		input_normalized[2] = input_[2]
+	elif config.factor_str == 'TEM':
+		input_normalized[3] = input_[3]
+	elif config.factor_str == 'WINDAvg2mi':
+		input_normalized[4] = input_[4]
+	elif config.factor_str == 'WINSAvg2mi':
+		input_normalized[5] = input_[5]
+	else:
+		raise Exception('no such weather factor')
+	return input_normalized, label_
 
 
 def parse_config_test(config_path, section, option):
@@ -123,6 +126,20 @@ def parse_config_test(config_path, section, option):
 		exit()
 	cp.read(config_path)
 	return cp.get(section, option)
+
+def __normalize(input):
+	if len(input.shape) != 4 or input.shape[0] != 7:
+		raise Exception('normalize argument shape error')
+	# shape = (7, 72_time, size_w, size_j)
+	input[0] = input[0] / 100   # 'PRE10m'
+	input[1] = input[1] / 1000  # 'PRS'
+	input[2] = input[2] / 100   # 'RHU'
+	input[3] = input[3] / 40    # 'TEM'
+	input[4] = input[4] / 360   # 'WINDAvg2mi'
+	input[5] = input[5] / 10    # 'WINSAvg2mi'
+	input[6] = input[6] / 3000  # 'dem'
+	return input
+
 
 if __name__=='__main__':
 	a = np.array([[[1, 2, 3], [4, 5, 6]]])
