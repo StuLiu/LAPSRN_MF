@@ -143,7 +143,7 @@ def parse_config_test(config_path, section, option):
 	return cp.get(section, option)
 
 def __normalize(input):
-	if len(input.shape) != 4 or input.shape[0] != 7:
+	if len(input.shape) != 4:
 		raise Exception('normalize argument shape error')
 	# shape = (7, 72_time, size_w, size_j)
 	input[0] = input[0] / 100   # 'PRE10m'
