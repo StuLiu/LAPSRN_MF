@@ -127,9 +127,9 @@ def preprocess(config):
 		input_normalized[5] = input_[5]
 	else:
 		raise Exception('no such weather factor')
-	plt.imsave('dem_input.png', input_[0, :, :, 6])
-	plt.imsave('PRS_input.png', input_[0, :, :, 1])
-	plt.imsave('PRS_label.png', label_[0, :, :, 0])
+	plt.imsave('dem_input.png', input_normalized[0, :, :, 6])
+	plt.imsave('PRS_input.png', input_normalized[0, :, :, 1])
+	plt.imsave('PRS_label.png', input_normalized[0, :, :, 0])
 	return input_normalized, label_
 
 
