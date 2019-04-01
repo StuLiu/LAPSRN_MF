@@ -11,7 +11,7 @@ try:
 	area_str = sys.argv[2].split("=")[1]            # 1, 2, 3, 4, 5, 6, 7, 8
 	factor_str = sys.argv[3].split("=")[1].upper()  # PRE10m, PRS, RHU, TEM, WINDAvg2mi, WINSAvg2mi
 except Exception:
-	print("train.py接收参数错误，类似：CUDA_VISIBLE_DEVICES=0 python train.py mode=NMC area=4 factor=PRE")
+	print("train.py接收参数错误，类似：CUDA_VISIBLE_DEVICES=0 python train.py mode=NMC area=4 factor=PRS")
 	exit()
 
 # mode_str ,area_str, factor_str = 'NMC', '4', 'PRE'
