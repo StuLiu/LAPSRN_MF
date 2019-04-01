@@ -3,7 +3,7 @@ import pprint
 import tensorflow as tf
 import os
 from utils import parse_config_test
-os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 
 def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
     flags = tf.app.flags
