@@ -14,7 +14,7 @@ except Exception:
 	print("train.py接收参数错误，类似：CUDA_VISIBLE_DEVICES=0 python train.py mode=NMC area=4 factor=PRS")
 	exit()
 
-# mode_str ,area_str, factor_str = 'NMC', '4', 'PRE'
+# mode_str ,area_str, factor_str = 'NMC', '4', 'PRS'
 
 # 获取配置文件路径
 config_path = os.path.join(os.getcwd(), "config")
