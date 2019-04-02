@@ -36,7 +36,7 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         flags.DEFINE_integer('input_size_j', input_size_j, 'input size of image')
         flags.DEFINE_integer('output_size_w', output_size_w, 'output size of image')
         flags.DEFINE_integer('output_size_j', output_size_j, 'output size of image')
-        flags.DEFINE_integer('batch_size', 1, 'batch size')
+        flags.DEFINE_integer('batch_size', 1, 'batch siz    e')
         flags.DEFINE_string('ckpt', checkpoint_dir, 'directory of checkpoint')
         flags.DEFINE_boolean('is_train', False, 'True for training False for test')
         flags.DEFINE_string('factor_str', factor_str, 'factor name')
@@ -69,7 +69,7 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
 if __name__ == '__main__':
     run_test(area_str='4',
          mode_str='NMC',
-         factor_str='PRS',
+         factor_str='PRE10m',
          input_dir='factors/4',
          output_dir='output_1km'
     )
