@@ -162,6 +162,7 @@ def read_factors(factors_dir):
 	return factors  # (n, time, lat, lon)
 
 def read_factor(factors_dir, factor_str):
+	print(factors_dir, factor_str)
 	path_list = prepare_data(factors_dir)
 	result = []
 	for path in path_list:
