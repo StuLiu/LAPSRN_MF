@@ -111,7 +111,7 @@ def preprocess(config):
 	plt.imsave('example/dem_input.png', input_normalized[0, :, :, -1])
 	plt.imsave('example/input_PRE10m.png', input_normalized[0 :, :, 0])
 	plt.imsave('example/input_RHU.png', input_normalized[0, :, :, 1])
-	plt.imsave('example/label_{}.png'.format(config.factor_str), label_[:, :])
+	plt.imsave('example/label_{}.png'.format(config.factor_str), label_[0, :, :])
 	return input_normalized, label_
 
 
@@ -128,7 +128,7 @@ def __normalize(input):
 	if len(input.shape) != 4 or input.shape[-1] != 3:
 		raise Exception('normalize argument shape error')
 	# shape = (7, 72_time, size_w, size_j)
-	input[0] = input[0] / 20   # 'PRE10m'
+	input[0] = input[0] / 30   # 'PRE10m'
 	# input[1] = input[1] / 1000  # 'PRS'
 	input[1] = input[1] / 100   # 'RHU'
 	# input[3] = input[3] / 40    # 'TEM'
