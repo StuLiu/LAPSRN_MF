@@ -30,7 +30,7 @@ try:
 	decay_rate = float(parse_config_test(config_path, "common_option", "dr"))
 	batch_size = int(parse_config_test(config_path, "common_option", "batch_size"))
 	factors_dir = os.path.join("factors", area_str)     # 气象要素数据集文件目录
-	factor_str = factor_str     # 需要降尺度的气象要素代码: PRE, PRS, RHU, TEM, WIND, WINS
+	factor_str = factor_str     # 需要降尺度的气象要素代码: PRE10m, PRS, RHU, TEM, WINDAvg2mi, WINSAvg2mi
 	dem_dir = os.path.join("dem", area_str)
 	dem_path =  os.path.join(dem_dir, 'dem_{}.nc'.format(area_str))
 	checkpoint = os.path.join("checkpoint", mode_str)

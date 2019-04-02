@@ -173,8 +173,9 @@ def read_factor(factors_dir, factor_str):
 	result = np.where(np.isnan(result), 0, result)
 	result = np.where(result < 0, 0, result)
 	result = np.where(result > 9999, 0, result)
+	print(result.shape, result.max())
 	return result   # (time, lat, lon)
 
 if __name__=='__main__':
 	# progress('./label/4/RGF_2017060100_SCN_PRE10m.nc')
-	read_factors('factors/4')
+	read_factor('factors/4', 'PRE10m')
