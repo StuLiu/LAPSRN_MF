@@ -154,8 +154,8 @@ class LapSRN(object):
 				writenc(writepath, config.factor_str, outnc)
 
 				print(np.array(writedata).shape)
-				plt.imsave('PRS_1.png', np.array(writedata)[0, :, :])
-				plt.imsave('PRS_72.png', np.array(writedata)[71, :, :])
+				plt.imsave('example/PRE_1.png', np.array(writedata)[0, :, :])
+				plt.imsave('example/PRE_72.png', np.array(writedata)[71, :, :])
 
 				writedata = []
 				print('{0:11}/{1}   |'.format(i%hours_len+1, str(hours_len))+'██'*(i%hours_len+1)+'  '*(hours_len-1-i%hours_len)+'|   COMPLETE!')
