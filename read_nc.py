@@ -173,7 +173,6 @@ def read_factor(factors_dir, factor_str):
 	result = np.where(np.isnan(result), 0, result)
 	result = np.where(result < 0, 0, result)
 	result = np.where(result > 9999, 0, result)
-	print(result.shape, result[0].max(), result[1].max())
 	return result   # (time, lat, lon)
 
 if __name__=='__main__':
