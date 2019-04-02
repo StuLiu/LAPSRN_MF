@@ -16,7 +16,7 @@ def prepare_data(dataset):
 	data_dir = os.path.join(os.getcwd(), dataset)
 	# glob函数用来查找符合指定规则的文件路径名
 	data = glob.glob(os.path.join(data_dir, "*.nc"))
-
+	data.sort()
 	return data
 
 def get_time_dimen(config):
@@ -126,6 +126,50 @@ def progress(path):
 		print(d.shape, d.max())
 		return d
 
+def read_dem(input_file):
+	with nc.Dataset(input_file) as data:
+		if "dem" in input_file:
+			d = np.array(data.variables['dem'][:])
+			d = d.reshape(-1, d.shape[-2], d.shape[-1])
+			return d
+	return None
+
+def read_factors(input_dir):
+	path_list = prepare_data(input_dir)
+	# [降水数据, 湿度数据]
+	result = [[], []]
+	for path in path_list:
+		with nc.Dataset(path) as data:
+			'''分类型处理'''
+			if "PRE" in path:
+				d = data.variables['PRE10m'][:]
+				result[0].extend(d)
+			# elif "PRS" in path:
+			# 	d = data.variables['PRS'][:]
+			# 	result[1].extend(d)
+			elif "RHU" in path:
+				d = data.variables['RHU'][:]
+				result[1].extend(d)
+			# elif "TEM" in path:
+			# 	d = data.variables['TEM'][:]
+			# 	result[3].extend(d)
+			# elif "WIND" in path:
+			# 	d = data.variables['WINDAvg2mi'][:]
+			# 	result[4].extend(d)
+			# elif "WINS" in path:
+			# 	d = data.variables['WINSAvg2mi'][:]
+			# 	result[5].extend(d)
+			else:
+				pass
+	factors = np.array(result)
+	# factors = np.where(np.isnan(factors), 0, factors)
+	factors = np.where(factors < 0, 0, factors)
+	factors = np.where(factors > 9999, 0, factors)
+
+	print(factors.shape, factors[0].max(), factors[1].max())
+	return factors
+
+
 if __name__=='__main__':
 	# progress('./label/4/RGF_2017060100_SCN_PRE10m.nc')
-	get_data('label/4')
+	read_factors('factors/4')

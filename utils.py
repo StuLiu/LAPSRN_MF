@@ -51,7 +51,7 @@ def preprocess_reconstruct(config):
 	# plt.imsave('dem_.png', input_[0, :, :, 6])
 	# plt.imsave('PRE10m.png', input_[0, :, :, 0])
 	input_normalized = __normalize(input_)
-	if config.factor_str == 'PRE10m':
+	if config.factor_str == 'PRE':
 		input_normalized[0] = input_[0]
 	elif config.factor_str == 'PRS':
 		input_normalized[1] = input_[1]
@@ -59,9 +59,9 @@ def preprocess_reconstruct(config):
 		input_normalized[2] = input_[2]
 	elif config.factor_str == 'TEM':
 		input_normalized[3] = input_[3]
-	elif config.factor_str == 'WINDAvg2mi':
+	elif config.factor_str == 'WIND':
 		input_normalized[4] = input_[4]
-	elif config.factor_str == 'WINSAvg2mi':
+	elif config.factor_str == 'WINS':
 		input_normalized[5] = input_[5]
 	else:
 		raise Exception('no such weather factor')
@@ -113,7 +113,7 @@ def preprocess(config):
 	print('input_.shape transposed:', input_.shape)
 
 	input_normalized = __normalize(input_)
-	if config.factor_str == 'PRE10m':
+	if config.factor_str == 'PRE':
 		input_normalized[0] = input_[0]
 	elif config.factor_str == 'PRS':
 		input_normalized[1] = input_[1]
@@ -121,9 +121,9 @@ def preprocess(config):
 		input_normalized[2] = input_[2]
 	elif config.factor_str == 'TEM':
 		input_normalized[3] = input_[3]
-	elif config.factor_str == 'WINDAvg2mi':
+	elif config.factor_str == 'WIND':
 		input_normalized[4] = input_[4]
-	elif config.factor_str == 'WINSAvg2mi':
+	elif config.factor_str == 'WINS':
 		input_normalized[5] = input_[5]
 	else:
 		raise Exception('no such weather factor')
