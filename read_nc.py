@@ -3,18 +3,11 @@ import os
 import glob
 import numpy as np
 
-
-'''获取文件夹里，nc文件的路径列表'''
 def prepare_data(dataset):
 	print(dataset)
 	if not os.path.exists(dataset):
-		print(" No such file or directory:{0}".format(dataset))
-		exit()
-	#获取ｎｃ文件路径列表
-	filenames = os.listdir(dataset)
-	# os.getcwd()：获取当前工作目录，也就是在哪个目录下运行这个程序。
+		raise Exception(" No such file or directory:{0}".format(dataset))
 	data_dir = os.path.join(os.getcwd(), dataset)
-	# glob函数用来查找符合指定规则的文件路径名
 	data = glob.glob(os.path.join(data_dir, "*.nc"))
 	data.sort()
 	return data
@@ -126,16 +119,16 @@ def progress(path):
 		print(d.shape, d.max())
 		return d
 
-def read_dem(input_file):
-	with nc.Dataset(input_file) as data:
-		if "dem" in input_file:
+def read_dem(dem_file):
+	with nc.Dataset(dem_file) as data:
+		if "dem" in dem_file:
 			d = np.array(data.variables['dem'][:])
 			d = d.reshape(-1, d.shape[-2], d.shape[-1])
 			return d
 	return None
 
-def read_factors(input_dir):
-	path_list = prepare_data(input_dir)
+def read_factors(factors_dir):
+	path_list = prepare_data(factors_dir)
 	# [降水数据, 湿度数据]
 	result = [[], []]
 	for path in path_list:
@@ -165,10 +158,23 @@ def read_factors(input_dir):
 	factors = np.where(np.isnan(factors), 0, factors)
 	factors = np.where(factors < 0, 0, factors)
 	factors = np.where(factors > 9999, 0, factors)
-
 	print(factors.shape, factors[0].max(), factors[1].max())
-	return factors
+	return factors  # (n, time, lat, lon)
 
+def read_factor(factors_dir, factor_str):
+	path_list = prepare_data(factors_dir)
+	result = []
+	for path in path_list:
+		with nc.Dataset(path) as data:
+			if factor_str in path:
+				d = data.variables[factor_str][:]
+				result.extend(d)
+	result = np.array(result)
+	result = np.where(np.isnan(result), 0, result)
+	result = np.where(result < 0, 0, result)
+	result = np.where(result > 9999, 0, result)
+	print(result.shape, result[0].max(), result[1].max())
+	return result   # (time, lat, lon)
 
 if __name__=='__main__':
 	# progress('./label/4/RGF_2017060100_SCN_PRE10m.nc')

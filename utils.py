@@ -4,20 +4,8 @@ import scipy.ndimage
 import numpy as np
 import matplotlib.pyplot as plt
 
-from read_nc import get_data
+from read_nc import *
 import configparser
-
-
-def get_names(config):
-	return os.listdir(config.input)
-
-
-def is_zero(l):
-	for i in l:
-		if max(i) > 10:
-			return True
-	return False
-
 
 def preprocess_reconstruct(config):
 	factors_data = get_data(config.input_dir)
@@ -67,18 +55,11 @@ def preprocess_reconstruct(config):
 		raise Exception('no such weather factor')
 	return input_
 
-
 def preprocess(config):
-	dem_data = get_data(config.dem_dir)                             # shape = (1, size_w, size_j)
-	label_data = get_data(config.factors_dir, config.factor_str)    # shape = (72_time, size_w, size_j)
-	factors_data = get_data(config.factors_dir)                     # shape = (6, 72_time, size_w, size_j)
+	dem_data = read_dem(config.dem_dir)                                 # shape = (1, size_w, size_j)
+	label_data = read_factor(config.factors_dir, config.factor_str)     # shape = (time, size_w, size_j)
+	factors_data = read_factors(config.factors_dir)                     # shape = (n, time, size_w, size_j)
 	print(dem_data.shape, label_data.shape, factors_data.shape)
-
-	# 将nan数据置零
-	dex = np.isnan(dem_data)
-	dem_data[dex] = 0
-	dex = np.isnan(factors_data)
-	factors_data[dex] = 0
 
 	# 缩放各要素数据，作为模型输入的一部分
 	scale_w = config.input_size_w / factors_data.shape[-2]
@@ -87,7 +68,7 @@ def preprocess(config):
 	factors_data_scaled = np.maximum(factors_data_scaled, 0)
 	factors_data_scaled = np.where(factors_data_scaled < 0, 0, factors_data_scaled)
 	factors_data_scaled = np.where(factors_data_scaled > 9999, 0, factors_data_scaled)
-	# factors_data_scaled shape = (6, 72_time, input_size_w, input_size_j)
+	# factors_data_scaled shape = (n, 72_time, input_size_w, input_size_j)
 	print('factors_data_scaled.shape:', factors_data_scaled.shape)
 
 	# 缩放地形数据，作为模型输入的一部分
@@ -107,24 +88,24 @@ def preprocess(config):
 	print('label_.shape:', label_.shape)
 
 	input_ = np.append(factors_data_scaled, dem_data)
-	input_ = input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
+	input_ = input_.reshape(3, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
 	print('input_.shape origin:', input_.shape)
 	input_ = input_.transpose((1, 2, 3, 0))
 	print('input_.shape transposed:', input_.shape)
 
 	input_normalized = __normalize(input_)
-	if config.factor_str == 'PRE':
+	if config.factor_str == 'PRE10m':
 		input_normalized[0] = input_[0]
-	elif config.factor_str == 'PRS':
-		input_normalized[1] = input_[1]
+	# elif config.factor_str == 'PRS':
+	# 	input_normalized[1] = input_[1]
 	elif config.factor_str == 'RHU':
-		input_normalized[2] = input_[2]
-	elif config.factor_str == 'TEM':
-		input_normalized[3] = input_[3]
-	elif config.factor_str == 'WIND':
-		input_normalized[4] = input_[4]
-	elif config.factor_str == 'WINS':
-		input_normalized[5] = input_[5]
+		input_normalized[1] = input_[1]
+	# elif config.factor_str == 'TEM':
+	# 	input_normalized[3] = input_[3]
+	# elif config.factor_str == 'WINDAvg2mi':
+	# 	input_normalized[4] = input_[4]
+	# elif config.factor_str == 'WINSAvg2mi':
+	# 	input_normalized[5] = input_[5]
 	else:
 		raise Exception('no such weather factor')
 	plt.imsave('dem_input.png', input_normalized[0, :, :, 6])
@@ -143,17 +124,26 @@ def parse_config_test(config_path, section, option):
 	return cp.get(section, option)
 
 def __normalize(input):
-	if len(input.shape) != 4 or input.shape[-1] != 7:
+	if len(input.shape) != 4 or input.shape[-1] != 3:
 		raise Exception('normalize argument shape error')
 	# shape = (7, 72_time, size_w, size_j)
-	input[0] = input[0] / 100   # 'PRE10m'
-	input[1] = input[1] / 1000  # 'PRS'
-	input[2] = input[2] / 100   # 'RHU'
-	input[3] = input[3] / 40    # 'TEM'
-	input[4] = input[4] / 360   # 'WINDAvg2mi'
-	input[5] = input[5] / 10    # 'WINSAvg2mi'
-	input[6] = input[6] / 3000  # 'dem'
+	input[0] = input[0] / 20   # 'PRE10m'
+	# input[1] = input[1] / 1000  # 'PRS'
+	input[1] = input[1] / 100   # 'RHU'
+	# input[3] = input[3] / 40    # 'TEM'
+	# input[4] = input[4] / 360   # 'WINDAvg2mi'
+	# input[5] = input[5] / 10    # 'WINSAvg2mi'
+	# input[6] = input[6] / 3000  # 'dem'
 	return input
+
+def get_names(config):
+	return os.listdir(config.input)
+
+def is_zero(l):
+	for i in l:
+		if max(i) > 10:
+			return True
+	return False
 
 
 if __name__=='__main__':
