@@ -8,23 +8,13 @@ from read_nc import *
 import configparser
 
 def preprocess_reconstruct(config):
-	factors_data = get_data(config.input_dir)
-	dem_data = get_data(config.dem_dir)
+	factors_data = read_factors(config.factors_dir)
+	dem_data = read_dem(config.dem_path)
 
-	# 将nan数据置零
-	dex = np.isnan(dem_data)
-	dem_data[dex] = 0
-	dex = np.isnan(factors_data)
-	factors_data[dex] = 0
-	# dem_data = dem_data/3000.
-
-	# img_ = get_data(config.input)
 	scale_w = config.input_size_w / factors_data.shape[-2]
 	scale_j = config.input_size_j / factors_data.shape[-1]
 	factors_data_scaled = scipy.ndimage.zoom(factors_data, (1, 1, scale_w, scale_j))
 	factors_data_scaled = np.maximum(factors_data_scaled, 0)
-	factors_data_scaled = np.where(factors_data_scaled < 0, 0, factors_data_scaled)
-	factors_data_scaled = np.where(factors_data_scaled > 9999, 0, factors_data_scaled)
 	print('factors_data_scaled:', factors_data_scaled.shape)
 
 	dem_data_scaled = scipy.ndimage.zoom(dem_data, (1, scale_w, scale_j))
@@ -33,7 +23,7 @@ def preprocess_reconstruct(config):
 	print('dem_data_scaled:', dem_data_scaled.shape)
 
 	input_ = np.append(factors_data_scaled, dem_data_scaled)
-	input_ = input_.reshape(7, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
+	input_ = input_.reshape(3, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
 	input_ = input_.transpose((1, 2, 3, 0))
 
 	# plt.imsave('dem_.png', input_[0, :, :, 6])
@@ -66,8 +56,6 @@ def preprocess(config):
 	scale_j = config.input_size_j / factors_data.shape[-1]
 	factors_data_scaled = scipy.ndimage.zoom(factors_data, (1, 1, scale_w, scale_j))
 	factors_data_scaled = np.maximum(factors_data_scaled, 0)
-	factors_data_scaled = np.where(factors_data_scaled < 0, 0, factors_data_scaled)
-	factors_data_scaled = np.where(factors_data_scaled > 9999, 0, factors_data_scaled)
 	# factors_data_scaled shape = (n, 72_time, input_size_w, input_size_j)
 	print('factors_data_scaled.shape:', factors_data_scaled.shape)
 
