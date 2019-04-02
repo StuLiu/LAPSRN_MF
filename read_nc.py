@@ -162,7 +162,7 @@ def read_factors(input_dir):
 			else:
 				pass
 	factors = np.array(result)
-	# factors = np.where(np.isnan(factors), 0, factors)
+	factors = np.where(np.isnan(factors), 0, factors)
 	factors = np.where(factors < 0, 0, factors)
 	factors = np.where(factors > 9999, 0, factors)
 
