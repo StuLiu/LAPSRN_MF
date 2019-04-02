@@ -56,7 +56,7 @@ def preprocess_reconstruct(config):
 	return input_
 
 def preprocess(config):
-	dem_data = read_dem(config.dem_dir)                                 # shape = (1, size_w, size_j)
+	dem_data = read_dem(config.dem_path)                                # shape = (1, size_w, size_j)
 	label_data = read_factor(config.factors_dir, config.factor_str)     # shape = (time, size_w, size_j)
 	factors_data = read_factors(config.factors_dir)                     # shape = (n, time, size_w, size_j)
 	print(dem_data.shape, label_data.shape, factors_data.shape)

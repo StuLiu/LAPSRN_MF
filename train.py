@@ -32,6 +32,7 @@ try:
 	factors_dir = os.path.join("factors", area_str)     # 气象要素数据集文件目录
 	factor_str = factor_str     # 需要降尺度的气象要素代码: PRE, PRS, RHU, TEM, WIND, WINS
 	dem_dir = os.path.join("dem", area_str)
+	dem_path =  os.path.join("dem_dir", 'dem_{}'.format(area_str))
 	checkpoint = os.path.join("checkpoint", mode_str)
 	checkpoint = os.path.join(checkpoint, area_str)
 	checkpoint = os.path.join(checkpoint, factor_str)
@@ -48,7 +49,7 @@ try:
 	flags.DEFINE_integer('output_size_w', output_size_w, 'output size of image')
 	flags.DEFINE_integer('output_size_j', output_size_j, 'output size of image')
 	flags.DEFINE_string('ckpt', checkpoint, 'directory of checkpoint')
-	flags.DEFINE_string('dem_dir', dem_dir, 'directory of dem')
+	flags.DEFINE_string('dem_path', dem_path, 'directory of dem')
 	flags.DEFINE_string('factors_dir', factors_dir, 'directory of label')
 	flags.DEFINE_string('factor_str', factor_str, 'directory of label')
 	flags.DEFINE_integer('batch_size', batch_size, 'batch size')
