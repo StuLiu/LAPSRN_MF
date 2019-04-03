@@ -29,7 +29,7 @@ def preprocess_reconstruct(config):
 
 	plt.imsave('example/test_input_PRE10m.png', input_[0, :, :, 0])
 	plt.imsave('example/test_input_RHU.png', input_[0, :, :, 1])
-	plt.imsave('exmaple/test_input_dem_.png', input_[0, :, :, -1])
+	plt.imsave('example/test_input_dem_.png', input_[0, :, :, -1])
 	input_normalized = __normalize(input_)
 	if config.factor_str == 'PRE10m':
 		input_normalized[0] = input_[0]
