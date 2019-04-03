@@ -10,6 +10,7 @@ import configparser
 def preprocess_reconstruct(config):
 	factors_data = read_factors(config.factors_dir)
 	dem_data = read_dem(config.dem_path)
+	print('test factors shape:{}, dem shape:{}'.format(factors_data.shape, dem_data.shape))
 
 	scale_w = config.input_size_w / factors_data.shape[-2]
 	scale_j = config.input_size_j / factors_data.shape[-1]
@@ -26,8 +27,9 @@ def preprocess_reconstruct(config):
 	input_ = input_.reshape(3, factors_data_scaled.shape[1], config.input_size_w, config.input_size_j)
 	input_ = input_.transpose((1, 2, 3, 0))
 
-	# plt.imsave('dem_.png', input_[0, :, :, 6])
-	# plt.imsave('PRE10m.png', input_[0, :, :, 0])
+	plt.imsave('example/test_input_PRE10m.png', input_[0, :, :, 0])
+	plt.imsave('example/test_input_RHU.png', input_[0, :, :, 1])
+	plt.imsave('exmaple/test_input_dem_.png', input_[0, :, :, -1])
 	input_normalized = __normalize(input_)
 	if config.factor_str == 'PRE10m':
 		input_normalized[0] = input_[0]

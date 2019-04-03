@@ -1,4 +1,4 @@
-from lapsrn_MF_0 import LapSRN
+from lapsrn_MF import LapSRN
 import pprint
 import tensorflow as tf
 import os
