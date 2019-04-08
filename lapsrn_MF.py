@@ -24,9 +24,9 @@ class LapSRN(object):
 		self.learn_rate = tf.train.exponential_decay(self.lr, self.global_step, self.Epoch // 10, self.dr)
 		with tf.variable_scope('input'):
 			# 输入低分辨率数据
-			self.X = tf.placeholder(tf.float32, [self.batch_size, self.input_size_w, self.input_size_j, 3], name='x')
+			self.X = tf.placeholder(tf.float32, [None, self.input_size_w, self.input_size_j, 3], name='x')
 			# 输入低分辨率数据对应的高分辨率标签数据
-			self.Y = tf.placeholder(tf.float32, [self.batch_size, self.output_size_w, self.output_size_j, 1], name='y')
+			self.Y = tf.placeholder(tf.float32, [None, self.output_size_w, self.output_size_j, 1], name='y')
 			# self.w : 超分辨率分支反卷积权重
 			self.w = tf.get_variable(shape=[4, 4, 1, 3], name='w', initializer=tf.ones_initializer())
 			# w_input : 特征提取分支上第一层卷积时候使用的权重，卷积核第三个参数对应X的深度
