@@ -134,7 +134,7 @@ def read_factors(factors_dir):
 	for path in path_list:
 		with nc.Dataset(path) as data:
 			'''分类型处理'''
-			if "PRE" in path:
+			if "PRE10m" in path:
 				d = data.variables['PRE10m'][:]
 				result[0].extend(d)
 			# elif "PRS" in path:
