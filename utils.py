@@ -49,13 +49,15 @@ def preprocess_reconstruct(config):
 
 def preprocess(config):
 	label_data = read_factor(config.factors_dir, 'RHU')     # shape = (time, size_w, size_j)
+	print('label_data.shape:', label_data.shape)
+
 	dem_data = read_dem(config.dem_path) / 3000             # shape = (1, size_w, size_j)
 	dem_data = np.tile(dem_data, (label_data.shape[0], 1))  # shape = (time, size_w, size_j)
-	dem_data.reshape(-1, label_data.shape[-2], label_data.shape[-1])
-	input_data = np.append(label_data, dem_data)            # shape = (2, time, size_w, size_j)
-	input_data.reshape(-1, label_data.shape[0], label_data.shape[-2], label_data.shape[-1])
+	dem_data = dem_data.reshape(-1, label_data.shape[-2], label_data.shape[-1])
 	print('dem_data.shape:', dem_data.shape)
-	print('label_data.shape:', label_data.shape)
+
+	input_data = np.append(label_data, dem_data)            # shape = (2, time, size_w, size_j)
+	input_data = input_data.reshape(-1, label_data.shape[0], label_data.shape[-2], label_data.shape[-1])
 	print('input_data.shape:', input_data.shape)
 	plt.imsave('example/train_origin_dem.png', input_data[0, 0, :, :])
 	plt.imsave('example/train_origin_RHU.png', input_data[1, 0, :, :])
@@ -65,7 +67,7 @@ def preprocess(config):
 	scale_w = config.input_size_w / input_data.shape[-2]
 	scale_j = config.input_size_j / input_data.shape[-1]
 	input_data = scipy.ndimage.zoom(input_data, (1, 1, scale_w, scale_j))
-	input_data.reshape(-1, label_data.shape[0], config.input_size_w, config.input_size_j)
+	input_data = input_data.reshape(-1, label_data.shape[0], config.input_size_w, config.input_size_j)
 	input_data = input_data.transpose((1, 2, 3, 0))
 	print('scaled input_data.shape:', input_data.shape)     # shape = (time, size_w, size_j, 2)
 	plt.imsave('example/train_input_dem.png', input_data[0, :, :, 0])
