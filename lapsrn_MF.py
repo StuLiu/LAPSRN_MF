@@ -131,13 +131,13 @@ class LapSRN(object):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
 			writedata.append(np.array(Output).squeeze())
 		writedata = np.array(writedata)
-		writedata = np.where(writedata < 0.01, 0, writedata)
+		writedata = np.where(writedata < 0.1, 0, writedata)
 		print(writedata.shape)
 
 		plt.imsave('example/test_output_RHU.png', np.array(writedata)[0, :, :])
 		outnc = [i for i in all_dimen]
 		outnc.append(writedata)
-		writepath = os.path.join(config.output_dir, config.mode_str+'_'+config.area_str+'_'+config.factor_str)
+		writepath = os.path.join(config.output_dir, config.mode_str+'_'+config.area_str+'_'+config.factor_str+'.nc')
 		writenc(writepath, config.factor_str, outnc)
 
 			#print(outnc[0])

@@ -73,6 +73,6 @@ if __name__ == '__main__':
          mode_str='NMC',
          factor_str='RHU',
          # factor_str='PRE10m',
-         input_dir='factors/4',
+         input_dir='input_5km',
          output_dir='output_1km'
     )

@@ -18,11 +18,11 @@ def writenc(name, factor_str, data):
 		d = np.where(d<0.1,0,d)
 		#data[-1] = data[-1].round(2)
 		dataset.variables[keys[-1]][:] = d #np.maximum(data[-1],0)
-		tt = name.split('_')[-2]
-		yy, mm, dd, hh = tt[0:4],tt[4:6],tt[6:8],tt[8:10]
-		time = dataset.variables['time']
-		time.units = 'minutes since %s-%s-%s %s:00:00'%(yy,mm,dd,hh)
-		time.calendar = 'gregorian'
+		# tt = name.split('_')[-2]
+		# yy, mm, dd, hh = tt[0:4],tt[4:6],tt[6:8],tt[8:10]
+		# time = dataset.variables['time']
+		# time.units = 'minutes since %s-%s-%s %s:00:00'%(yy,mm,dd,hh)
+		# time.calendar = 'gregorian'
 		dataset.variables['lat'].units = 'degrees_north'
 		dataset.variables['lon'].units = 'degrees_east'
 		# dataset.variables[factor_str].units = 'mm'
