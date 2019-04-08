@@ -135,6 +135,12 @@ class LapSRN(object):
 		print(writedata.shape)
 
 		plt.imsave('example/test_output_RHU.png', np.array(writedata)[0, :, :])
+		outnc = [i for i in all_dimen]
+		outnc.append(writedata)
+		writepath = os.path.join(config.output_dir, config.mode_str+'_'+config.area_str+'_'+config.factor_str)
+		writenc(writepath, config.factor_str, outnc)
+
+			#print(outnc[0])
 		# idx = len(input)//self.batch_size
 		# writedata = []
 		# for i in range(idx):
