@@ -40,6 +40,8 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
         flags.DEFINE_string('ckpt', checkpoint_dir, 'directory of checkpoint')
         flags.DEFINE_boolean('is_train', False, 'True for training False for test')
         flags.DEFINE_string('factor_str', factor_str, 'factor name')
+        flags.DEFINE_string('area_str', area_str, 'factor name')
+        flags.DEFINE_string('mode_str', mode_str, 'factor name')
 
         pp = pprint.PrettyPrinter()
         FLAGS._parse_flags()
