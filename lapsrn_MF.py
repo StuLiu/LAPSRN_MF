@@ -113,7 +113,7 @@ class LapSRN(object):
 		print("测试时候，输入数据的shape是：{0}".format(input.shape))
 		all_dimen = []
 		time_dimen = range(input.shape[0])
-		lat, lon = config.output_size_w, config.output_size_j
+		lat, lon = get_lat_lon_dimen(config)
 
 		all_dimen.append(time_dimen)
 		all_dimen.append(lat)
