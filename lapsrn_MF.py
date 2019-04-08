@@ -127,7 +127,7 @@ class LapSRN(object):
 			exit(-1)
 
 		writedata = []
-		for i in range(time_dimen):
+		for i in range(len(time_dimen)):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
 			writedata.append(np.array(Output).squeeze())
 		writedata = np.array(writedata)
