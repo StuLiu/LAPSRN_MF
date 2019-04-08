@@ -113,7 +113,7 @@ class LapSRN(object):
 
 	def test(self, config):
 		# input = preprocess_reconstruct(config)
-		input = np.ones(shape=(287, 241, 401, 3),dtype='float32')
+		input = np.ones(shape=(288, 241, 401, 3),dtype='float32')
 		print("测试时候，输入数据的shape是：{0}".format(input.shape))
 		all_dimen = []
 		time_dimen = input.shape[0]
@@ -130,9 +130,11 @@ class LapSRN(object):
 			print('[!]LOADING FAILED', self.ckpt)
 			exit(-1)
 
+		writedata = np.array([])
 		for i in range(time_dimen):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
-			print(np.array(Output).shape)
+			np.append(writedata, Output.squeeze())
+		print(writedata.shape)
 		# idx = len(input)//self.batch_size
 		# writedata = []
 		# for i in range(idx):
