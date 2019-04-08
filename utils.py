@@ -70,8 +70,8 @@ def preprocess(config):
 	input_data = input_data.reshape(-1, label_data.shape[0], config.input_size_w, config.input_size_j)
 	input_data = input_data.transpose((1, 2, 3, 0))
 	print('scaled input_data.shape:', input_data.shape)     # shape = (time, size_w, size_j, 2)
-	plt.imsave('example/train_input_dem.png', input_data[0, :, :, 0])
-	plt.imsave('example/train_input_RHU.png', input_data[0, :, :, 1])
+	plt.imsave('example/train_input_dem.png', input_data[0, :, :, -1])
+	plt.imsave('example/train_input_RHU.png', input_data[0, :, :, 0])
 
 	# 缩放标签数据，作为模型的输入Y
 	scale_w = config.output_size_w / label_data.shape[-2]
