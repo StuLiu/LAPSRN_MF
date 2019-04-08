@@ -130,7 +130,10 @@ class LapSRN(object):
 		for i in range(time_dimen):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
 			writedata.append(np.array(Output).squeeze())
-		print(np.array(writedata).shape)
+		writedata = np.array(writedata)
+		writedata = np.where(writedata < 0.001, 0, writedata)
+		print(writedata.shape)
+
 		plt.imsave('example/test_output_RHU.png', np.array(writedata)[0, :, :])
 		# idx = len(input)//self.batch_size
 		# writedata = []
