@@ -112,8 +112,8 @@ class LapSRN(object):
 					self.save(self.ckpt,counter)
 
 	def test(self, config):
-		# input = preprocess_reconstruct(config)
-		input = np.ones(shape=(288, 241, 401, 3),dtype='float32')
+		input = preprocess_reconstruct(config)
+		# input = np.ones(shape=(288, 241, 401, 3),dtype='float32')
 		print("测试时候，输入数据的shape是：{0}".format(input.shape))
 		all_dimen = []
 		time_dimen = input.shape[0]
@@ -135,6 +135,8 @@ class LapSRN(object):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
 			writedata.append(np.array(Output).squeeze())
 		print(np.array(writedata).shape)
+		plt.imsave('example/output_RHU_1.png', np.array(writedata)[0, :, :])
+		plt.imsave('example/output_RHU_2.png', np.array(writedata)[71, :, :])
 		# idx = len(input)//self.batch_size
 		# writedata = []
 		# for i in range(idx):
