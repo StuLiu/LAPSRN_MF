@@ -114,18 +114,15 @@ class LapSRN(object):
 		all_dimen = []
 		time_dimen = range(input.shape[0])
 		lat, lon = get_lat_lon_dimen(config)
-
 		all_dimen.append(time_dimen)
 		all_dimen.append(lat)
 		all_dimen.append(lon)
 		self.sess.run(tf.global_variables_initializer())
-
 		if self.load(self.ckpt):
 			print('[*]LOADING SUCCESS', self.ckpt)
 		else:
 			print('[!]LOADING FAILED', self.ckpt)
 			exit(-1)
-
 		writedata = []
 		for i in range(len(time_dimen)):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
@@ -133,45 +130,11 @@ class LapSRN(object):
 		writedata = np.array(writedata)
 		writedata = np.where(writedata < 0.1, 0, writedata)
 		print(writedata.shape)
-
 		plt.imsave('example/test_output_RHU.png', np.array(writedata)[0, :, :])
 		outnc = [i for i in all_dimen]
 		outnc.append(writedata)
 		writepath = os.path.join(config.output_dir, config.mode_str+'_'+config.area_str+'_'+config.factor_str+'.nc')
 		writenc(writepath, config.factor_str, outnc)
-
-			#print(outnc[0])
-		# idx = len(input)//self.batch_size
-		# writedata = []
-		# for i in range(idx):
-		# 	if i% hours_len == 0:
-		# 		print('Reconstructing   ' + names[(i//hours_len)] +':')
-		#
-		# 	Output = self.sess.run([self.O],feed_dict={self.X:input[i*self.batch_size:(i+1)*self.batch_size], self.keep_prob:1})
-		# 	# w,w_,Input,Res,Output = self.sess.run([self.w,self.w_,self.I,self.R,self.O],feed_dict={self.X:input[i*self.batch_size:(i+1)*self.batch_size],self.keep_prob:1})
-		# 	#print("The shape of OutPut is:{0}".format(np.array(Output).shape))
-		# 	writedata.append(np.array(Output).squeeze())    # (时间维, 纬度维, 经度维)
-		#
-		#
-		# 	print('{0:11}/{1}   |'.format(i%hours_len+1, str(hours_len))+'██'*(i%hours_len+1)+'  '*(hours_len-1-i%hours_len)+'|',end='\r')
-		# 	sys.stdout.flush()
-		#
-		# 	if (i+1) % hours_len == 0:
-		# 		outnc = [i for i in all_dimen]
-		# 		#print(outnc[0])
-		# 		outnc.append(writedata)
-		# 		writepath = os.path.join(config.output_dir, names[(i+1)//hours_len-1])
-		# 		writepath = os.path.join(os.getcwd(), writepath)
-		# 		writenc(writepath, config.factor_str, outnc)
-		#
-		# 		print(np.array(writedata).shape)
-		# 		plt.imsave('example/output_RHU_1.png', np.array(writedata)[0, :, :])
-		# 		plt.imsave('example/output_RHU_2.png', np.array(writedata)[71, :, :])
-		#
-		# 		writedata = []
-		# 		print('{0:11}/{1}   |'.format(i%hours_len+1, str(hours_len))+'██'*(i%hours_len+1)+'  '*(hours_len-1-i%hours_len)+'|   COMPLETE!')
-		# 		sys.stdout.flush()
-
 
 	def load(self, checkpoint_dir):
 		model_dir = "%s_%s_%s" % ("lapsrn", self.output_size_w, self.output_size_j)
