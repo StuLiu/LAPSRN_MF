@@ -113,7 +113,7 @@ class LapSRN(object):
 
 	def test(self, config):
 		# input = preprocess_reconstruct(config)
-		input = np.ones(shape=(288, 241, 401, 3),dtype='float32')
+		input = np.ones(shape=(287, 241, 401, 3),dtype='float32')
 		print("测试时候，输入数据的shape是：{0}".format(input.shape))
 		all_dimen = []
 		time_dimen = input.shape[0]
