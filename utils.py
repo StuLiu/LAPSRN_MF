@@ -59,8 +59,8 @@ def preprocess(config):
 	input_data = np.append(label_data, dem_data)            # shape = (2, time, size_w, size_j)
 	input_data = input_data.reshape(-1, label_data.shape[0], label_data.shape[-2], label_data.shape[-1])
 	print('input_data.shape:', input_data.shape)
-	plt.imsave('example/train_origin_dem.png', input_data[0, 0, :, :])
-	plt.imsave('example/train_origin_RHU.png', input_data[1, 0, :, :])
+	plt.imsave('example/train_origin_dem.png', input_data[1, 0, :, :])
+	plt.imsave('example/train_origin_RHU.png', input_data[0, 0, :, :])
 
 
 	# 缩放input数据，作为模型的输入X
