@@ -52,7 +52,7 @@ class LapSRN(object):
 		##-----------------------------------------------------------------------------------##
 		# 超分辨率分支：使用反卷积把输入的数据提高到label大小，此时以变成单通道。并使用Leaky_relu激活函数进行激活
 		self.I = tf.nn.conv2d_transpose(self.X, self.w,
-		                                output_shape=[self.batch_size, self.output_size_w, self.output_size_j, 1],
+		                                output_shape=[None, self.output_size_w, self.output_size_j, 1],
 		                                strides=[1, 5, 5, 1], padding='SAME')
 		self.I = tf.maximum(0.1 * self.I, self.I)  # realize the leaky_relu function
 
@@ -67,7 +67,7 @@ class LapSRN(object):
 				conv_input = tf.maximum(conv_input * 0.2, conv_input, name='conv' + str(i))
 		# 特征提取分支第三步：使用反卷积操作，对conv_input进行上采样到output_size大小。这里使用的权重为self.w_，使用Leaky_relu激活函数进行激活
 		conv_10 = tf.nn.conv2d_transpose(conv_input, self.w_,
-		                                 output_shape=[self.batch_size, self.output_size_w, self.output_size_j, 1],
+		                                 output_shape=[None, self.output_size_w, self.output_size_j, 1],
 		                                 strides=[1, 5, 5, 1], padding='SAME')
 		conv_10 = tf.maximum(conv_10 * 0.1, conv_10)
 		# 特征提取分支第四步：反卷积之后，再次进行SAME卷积，作为特征提取分支的输出。
@@ -131,7 +131,7 @@ class LapSRN(object):
 			exit(-1)
 
 		i = 0
-		while (i+1) * self.batch_size < time_dimen:
+		while (i + 1) * self.batch_size < time_dimen:
 			curr_batch = input[i * self.batch_size:(i + 1) * self.batch_size]
 			Output = self.sess.run([self.O], feed_dict={self.X : curr_batch, self.keep_prob : 1})
 			print(np.array(Output).shape)
