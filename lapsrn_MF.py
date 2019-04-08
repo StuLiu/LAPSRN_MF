@@ -130,9 +130,14 @@ class LapSRN(object):
 			print('[!]LOADING FAILED', self.ckpt)
 			exit(-1)
 
-		for i in range(time_dimen):
-			Output = self.sess.run([self.O], feed_dict={self.X: input[i], self.keep_prob: 1})
+		i = 0
+		while (i+1) * self.batch_size < time_dimen:
+			curr_batch = input[i * self.batch_size:(i + 1) * self.batch_size]
+			Output = self.sess.run([self.O], feed_dict={self.X : curr_batch, self.keep_prob : 1})
 			print(np.array(Output).shape)
+			i += 1
+		Output = self.sess.run([self.O], feed_dict={self.X : input[i * self.batch_size:], self.keep_prob : 1})
+		print(np.array(Output).shape)
 		# idx = len(input)//self.batch_size
 		# writedata = []
 		# for i in range(idx):
