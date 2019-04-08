@@ -21,16 +21,16 @@ class LapSRN(object):
 	def build_model(self):
 		self.global_step = tf.Variable(tf.constant(0))
 		# tf.train.exponential_decay：使学习率指数衰减
-		self.learn_rate = tf.train.exponential_decay(self.lr, self.global_step, self.Epoch // 10, self.dr)
+		self.learn_rate = tf.train.exponential_decay(self.lr, self.global_step, self.Epoch // 100, self.dr)
 		with tf.variable_scope('input'):
 			# 输入低分辨率数据
-			self.X = tf.placeholder(tf.float32, [self.batch_size, self.input_size_w, self.input_size_j, 2], name='x')
+			self.X = tf.placeholder(tf.float32, [self.batch_size, self.input_size_w, self.input_size_j, 3], name='x')
 			# 输入低分辨率数据对应的高分辨率标签数据
 			self.Y = tf.placeholder(tf.float32, [self.batch_size, self.output_size_w, self.output_size_j, 1], name='y')
 			# self.w是超分辨率分支上反卷积的时候使用的权重
-			self.w = tf.get_variable(shape=[4, 4, 1, 2], name='w', initializer=tf.ones_initializer())
+			self.w = tf.get_variable(shape=[4, 4, 1, 3], name='w', initializer=tf.ones_initializer())
 			# w_input是特征提取分支上第一层卷积时候使用的权重，卷积核第三个参数对应X的深度
-			w_input = tf.get_variable(shape=[3, 3, 2, 32],
+			w_input = tf.get_variable(shape=[3, 3, 3, 32],
 			                          initializer=tf.random_normal_initializer(stddev=np.sqrt(2. / (3 * 3 * 32))),
 			                          name='w_input')
 		with tf.variable_scope('weights'):
@@ -88,7 +88,6 @@ class LapSRN(object):
 		print("input's shape is:{0}, label's shape is:{1}".format(input.shape, label.shape))
 		counter = 0
 		self.sess.run(tf.global_variables_initializer())
-
 		if self.load(self.ckpt):
 			print('[*]LOADING checkpoint SUCCESS!')
 		else:
@@ -101,11 +100,19 @@ class LapSRN(object):
 			np.random.shuffle(label)
 			for i in range(idx):
 				counter += 1
-				rate,loss,rr,rl,_ = self.sess.run([self.learn_rate,self.loss,self.rr,self.rl,self.optimizer],feed_dict={self.global_step:ep,self.X:input[i*self.batch_size:(i+1)*self.batch_size],self.Y:label[i*self.batch_size:(i+1)*self.batch_size],self.keep_prob:1})
-				if counter % 10 == 0:
-					print('Epoch: {0} lr: {1:.4} loss: {2:.4} res_learned: {3:.4} res_real: {4:.4}'.format(ep+1,rate,loss,rl,rr))
-				if counter%200 == 0:
-					self.save(self.ckpt,counter)
+				rate,loss,rr,rl,_ = self.sess.run([self.learn_rate,self.loss,self.rr,self.rl,self.optimizer],
+					feed_dict={
+						self.global_step:ep,
+						self.X:input[i*self.batch_size:(i+1)*self.batch_size],
+						self.Y:label[i*self.batch_size:(i+1)*self.batch_size],
+						self.keep_prob:1
+					})
+				if i == idx - 1:
+					print('Epoch: {0} lr: {1:.4} loss: {2:.4} res_learned: {3:.4} res_real: {4:.4}'.
+					      format(ep + 1, rate,loss, rl, rr))
+				if counter % 200 == 0:
+					self.save(self.ckpt, counter)
+
 
 	def test(self, config):
 		input = preprocess_reconstruct(config)
