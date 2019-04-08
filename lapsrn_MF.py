@@ -133,7 +133,8 @@ class LapSRN(object):
 		writedata = []
 		for i in range(time_dimen):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
-			writedata.extend(Output)
+			np.array(Output).squeeze()
+			writedata.append(Output)
 		print(np.array(writedata).shape)
 		# idx = len(input)//self.batch_size
 		# writedata = []
