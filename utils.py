@@ -51,6 +51,7 @@ def preprocess(config):
 	label_data = read_factor(config.factors_dir, 'RHU')     # shape = (time, size_w, size_j)
 	dem_data = read_dem(config.dem_path) / 3000             # shape = (1, size_w, size_j)
 	dem_data = np.tile(dem_data, (label_data.shape[0], 1))  # shape = (time, size_w, size_j)
+	dem_data.reshape(-1, label_data.shape[-2], label_data.shape[-1])
 	input_data = np.append(label_data, dem_data)            # shape = (2, time, size_w, size_j)
 	input_data.reshape(-1, label_data.shape[0], label_data.shape[-2], label_data.shape[-1])
 	print('dem_data.shape:', dem_data.shape)
