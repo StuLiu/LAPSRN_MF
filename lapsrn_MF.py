@@ -24,17 +24,17 @@ class LapSRN(object):
 		self.learn_rate = tf.train.exponential_decay(self.lr, self.global_step, self.Epoch // 10, self.dr)
 		with tf.variable_scope('input'):
 			# 输入低分辨率数据
-			self.X = tf.placeholder(tf.float32, [self.batch_size, self.input_size_w, self.input_size_j, 3], name='x')
+			self.X = tf.placeholder(tf.float32, [self.batch_size, self.input_size_w, self.input_size_j, 2], name='x')
 			# 输入低分辨率数据对应的高分辨率标签数据
 			self.Y = tf.placeholder(tf.float32, [self.batch_size, self.output_size_w, self.output_size_j, 1], name='y')
-			# self.w : 超分辨率分支反卷积权重
-			self.w = tf.get_variable(shape=[4, 4, 1, 3], name='w', initializer=tf.ones_initializer())
-			# w_input : 特征提取分支上第一层卷积时候使用的权重，卷积核第三个参数对应X的深度
-			w_input = tf.get_variable(shape=[3, 3, 3, 32],
+			# self.w是超分辨率分支上反卷积的时候使用的权重
+			self.w = tf.get_variable(shape=[4, 4, 1, 2], name='w', initializer=tf.ones_initializer())
+			# w_input是特征提取分支上第一层卷积时候使用的权重，卷积核第三个参数对应X的深度
+			w_input = tf.get_variable(shape=[3, 3, 2, 32],
 			                          initializer=tf.random_normal_initializer(stddev=np.sqrt(2. / (3 * 3 * 32))),
 			                          name='w_input')
 		with tf.variable_scope('weights'):
-			# 特征提取模块，连续五层卷积+一层反卷积+一层卷积
+			# 特征提取模块，连续五层卷积+一层反卷积
 			for i in range(5):
 				w = tf.get_variable(shape=[3, 3, 32, 32],
 				                    initializer=tf.random_normal_initializer(stddev=np.sqrt(2. / (3 * 3 * 32))),
@@ -45,17 +45,17 @@ class LapSRN(object):
 			w_out = tf.get_variable(shape=[3, 3, 1, 1],
 			                        initializer=tf.random_normal_initializer(stddev=np.sqrt(2. / (3 * 3 * 1))),
 			                        name='w_out')
-
 		# tf.nn.conv2d_transpose一共有5个参数：分别为：1、指需要做反卷积的输入图像，它要求是一个Tensor
-		# 2、卷积核，它要求是一个Tensor，具有[filter_height, filter_width, out_channels, in_channels]这样的shape，具体含义是[卷积核的高度，卷积核的宽度，卷积核个数，图像通道数]
-		# 3、反卷积操作输出的shape。4、反卷积时在图像每一维的步长，这是一个一维的向量，长度4。5、string类型的量，只能是"SAME","VALID"其中之一，这个值决定了不同的卷积方式
+		# 2、卷积核，它要求是一个Tensor，具有[filter_height, filter_width, out_channels, in_channels]这样的shape，
+		# 具体含义是[卷积核的高度，卷积核的宽度，卷积核个数，图像通道数]
+		# 3、反卷积操作输出的shape。4、反卷积时在图像每一维的步长，这是一个一维的向量，长度4。5、string类型的量，
+		# 只能是"SAME","VALID"其中之一，这个值决定了不同的卷积方式
 		##-----------------------------------------------------------------------------------##
 		# 超分辨率分支：使用反卷积把输入的数据提高到label大小，此时以变成单通道。并使用Leaky_relu激活函数进行激活
 		self.I = tf.nn.conv2d_transpose(self.X, self.w,
 		                                output_shape=[self.batch_size, self.output_size_w, self.output_size_j, 1],
 		                                strides=[1, 5, 5, 1], padding='SAME')
 		self.I = tf.maximum(0.1 * self.I, self.I)  # realize the leaky_relu function
-
 		# 特征提取分支第一步：使用w_input对输入进行SAME卷积，并使用Leaky_relu激活函数进行激活
 		conv_input = tf.nn.conv2d(self.X, w_input, strides=[1, 1, 1, 1], padding='SAME')
 		conv_input = tf.maximum(0.1 * conv_input, conv_input)
@@ -73,17 +73,14 @@ class LapSRN(object):
 		# 特征提取分支第四步：反卷积之后，再次进行SAME卷积，作为特征提取分支的输出。
 		self.R = tf.nn.conv2d(conv_10, w_out, strides=[1, 1, 1, 1], padding='SAME')
 		self.R = tf.maximum(self.R * 0.1, self.R)
-
 		# 合并操作：将两个分支的输出相加，作为最终的输出。
 		self.O = self.I + self.R
 		self.O = tf.nn.dropout(self.O, self.keep_prob)
-
 		# 分别计算：损失、学习到的残差、真实的残差
 		self.loss = tf.reduce_mean(tf.sqrt(tf.square(self.Y - self.O) + 1e-6))
 		self.rl = tf.reduce_mean(tf.abs(self.R) + 1e-6)
 		self.rr = tf.reduce_mean(tf.abs(self.Y - self.I) + 1e-6)
 		self.optimizer = tf.train.AdamOptimizer(self.lr).minimize(self.loss)
-
 		self.saver = tf.train.Saver()
 
 	def train(self, config):
@@ -96,7 +93,6 @@ class LapSRN(object):
 			print('[*]LOADING checkpoint SUCCESS!')
 		else:
 			print('[!]LOADING checkpoint failed!')
-
 		for ep in range(self.Epoch):
 			idx = len(input)//self.batch_size
 			np.random.seed(ep)
@@ -135,8 +131,7 @@ class LapSRN(object):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
 			writedata.append(np.array(Output).squeeze())
 		print(np.array(writedata).shape)
-		plt.imsave('example/output_RHU_1.png', np.array(writedata)[0, :, :])
-		plt.imsave('example/output_RHU_2.png', np.array(writedata)[71, :, :])
+		plt.imsave('example/test_output_RHU.png', np.array(writedata)[0, :, :])
 		# idx = len(input)//self.batch_size
 		# writedata = []
 		# for i in range(idx):
