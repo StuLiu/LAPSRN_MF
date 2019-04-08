@@ -131,7 +131,7 @@ class LapSRN(object):
 			Output = self.sess.run([self.O], feed_dict={self.X : input[i : i + 1], self.keep_prob : 1})
 			writedata.append(np.array(Output).squeeze())
 		writedata = np.array(writedata)
-		writedata = np.where(writedata < 0.001, 0, writedata)
+		writedata = np.where(writedata < 0.01, 0, writedata)
 		print(writedata.shape)
 
 		plt.imsave('example/test_output_RHU.png', np.array(writedata)[0, :, :])
