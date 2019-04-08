@@ -112,11 +112,12 @@ class LapSRN(object):
 					self.save(self.ckpt,counter)
 
 	def test(self, config):
-		input = preprocess_reconstruct(config)
+		# input = preprocess_reconstruct(config)
+		input = np.ones(shape=(288, 241, 401, 3),dtype='float32')
 		print("测试时候，输入数据的shape是：{0}".format(input.shape))
 		all_dimen = []
-		time_dimen = get_time_dimen(config)
-		lat, lon = get_lat_lon_dimen(config)
+		time_dimen = input.shape[0]
+		lat, lon = config.output_size_w, config.output_size_j
 
 		all_dimen.append(time_dimen)
 		all_dimen.append(lat)
