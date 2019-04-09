@@ -71,8 +71,8 @@ def run_test(area_str, mode_str, factor_str, input_dir, output_dir):
 if __name__ == '__main__':
     run_test(area_str='4',
          mode_str='NMC',
-         factor_str='RHU',
-         # factor_str='PRE10m',
+         # factor_str='RHU',
+         factor_str='PRE10m',
          input_dir='input_5km',
          output_dir='output_1km'
     )
