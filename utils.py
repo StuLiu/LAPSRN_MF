@@ -8,8 +8,8 @@ from read_nc import *
 import configparser
 
 def preprocess_reconstruct(config):
-	PRE_data = read_factor(config.factors_dir, 'PRE10m') / 30
-	RHU_data = read_factor(config.factors_dir, 'RHU') / 100
+	PRE_data = read_factor(config.input_dir, 'PRE10m') / 30
+	RHU_data = read_factor(config.input_dir, 'RHU') / 100
 	# label_data = None
 	if config.factor_str == 'PRE10m':
 		PRE_data *= 30
